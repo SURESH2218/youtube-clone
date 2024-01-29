@@ -6,7 +6,7 @@ const MainContainer = () => {
   return (
     <div>
       <ButtonLIst />
-      <VideoContainer classname="flex" />
+      <VideoContainer />
     </div>
   );
 };

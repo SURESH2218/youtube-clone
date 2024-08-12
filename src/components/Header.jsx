@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
 import { YOUTUBE_SEARCH_API } from "../utils/constants";
+import { cacheResults } from "../utils/searchSlice";
 
 export const Header = () => {
   const [searchQuery, setsearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showsuggestions, setshowSuggestions] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
+
+  const searchCache = useSelector((store) => store.search);
+
   const handleScroll = () => {
     setScrollPosition(window.scrollY);
   };
@@ -21,7 +25,11 @@ export const Header = () => {
   useEffect(() => {
     // console.log(searchQuery);
     const timer = setTimeout(() => {
-      getSearchSuggestions();
+      if (searchCache[searchQuery]) {
+        setSuggestions(searchCache[searchQuery]);
+      } else {
+        getSearchSuggestions();
+      }
     }, 200);
     return () => {
       clearTimeout(timer);
@@ -34,6 +42,9 @@ export const Header = () => {
     const response = await data.json();
     // console.log(response[1]);
     setSuggestions(response[1]);
+
+    //update cache
+    dispatch(cacheResults({ [searchQuery]: response[1] }));
   };
 
   const dispatch = useDispatch();

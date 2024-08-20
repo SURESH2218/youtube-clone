@@ -102,12 +102,14 @@ const Comment = ({ data }) => {
 
 const CommentsList = ({ comments }) => {
   return comments.map((comment, index) => (
-    <>
-      <Comment key={index} data={comment} />
-      <div className="pl-5 border-l-black ml-5">
-        <CommentsList comments={comment.replies} />
-      </div>
-    </>
+    <React.Fragment key={index}>
+      <Comment data={comment} />
+      {comment.replies && comment.replies.length > 0 && (
+        <div className="pl-5 border-l-black ml-5">
+          <CommentsList comments={comment.replies} />
+        </div>
+      )}
+    </React.Fragment>
   ));
 };
 

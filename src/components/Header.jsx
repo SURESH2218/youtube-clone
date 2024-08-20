@@ -44,7 +44,7 @@ export const Header = () => {
     setSuggestions(response[1]);
 
     //update cache
-    dispatch(cacheResults({ [searchQuery]: response[1] }));
+    dispatch(cacheResults({ searchQuery: response[1] }));
   };
 
   const dispatch = useDispatch();
